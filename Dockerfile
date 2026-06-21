@@ -15,19 +15,18 @@ ENV DDDDOCR_PORT=8000
 ENV DDDDOCR_WORKERS=1
 
 # OCR 引擎配置
-ENV DDDDOCR_OCR=true
+ENV DDDDOCR_OCR=false
 ENV DDDDOCR_DET=false
 ENV DDDDOCR_OLD=false
 ENV DDDDOCR_BETA=false
 ENV DDDDOCR_USE_GPU=false
 ENV DDDDOCR_DEVICE_ID=0
-ENV DDDDOCR_SHOW_AD=true
+ENV DDDDOCR_SHOW_AD=False
 
 # 自定义模型配置
 ENV DDDDOCR_IMPORT_ONNX_PATH=
 ENV DDDDOCR_CHARSETS_PATH=
 
-# 安装系统依赖
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
         build-essential \
@@ -41,14 +40,11 @@ RUN apt-get update && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
-# 先复制依赖文件，利用 Docker 构建缓存
 COPY requirements.txt .
 
-# 安装 Python 依赖
 RUN python -m pip install --no-cache-dir --upgrade pip setuptools wheel && \
     python -m pip install --no-cache-dir -r requirements.txt
 
-# 复制项目文件
 COPY . .
 
 EXPOSE 8000
